@@ -32,6 +32,13 @@ qubridge-artifact/
 │   ├── reproduce_all_ja.ipynb                 # one-stop Jupyter notebook (Japanese)
 │   ├── walkthrough_logical_en.ipynb           # logical-qubit walkthrough (English)
 │   └── walkthrough_logical_ja.ipynb           # logical-qubit walkthrough (Japanese)
+├── qubridge_logical/                          # vendored deps for walkthrough notebooks
+│   ├── __init__.py
+│   ├── circuits.py                            # logical/physical teleportation builders + DM fidelity
+│   ├── static_backend.py                      # calibration JSON loader
+│   ├── qubit_selection.py                     # VF2 layout selection
+│   ├── noise_utils.py                         # reduced noise model API
+│   └── lindblad_synthesis.py                  # Magnus M1 Pauli-Lindblad noise synthesis
 └── scripts/
     ├── reproduce_table1.py                    # Table I summary
     ├── reproduce_table2.py                    # Table II summary
@@ -39,6 +46,13 @@ qubridge-artifact/
     ├── plot_figures.py                        # regenerate Figs 2(b)/3(b)/4(b)/5
     └── plot_example.py                        # minimal Python script demo
 ```
+
+The `reproduce_all_*` notebooks and `scripts/*.py` only read CSVs from `data/`
+and have no Qiskit dependency at runtime. The `walkthrough_logical_*`
+notebooks construct the [[2,1,1]] logical-teleportation circuit live and use
+the vendored `qubridge_logical/` package together with the
+`calibration/ibm_torino_2026-01-16.json` snapshot — no upstream source tree is
+required.
 
 ## Data ↔ paper mapping
 
@@ -79,6 +93,21 @@ conda env create -f environment.yml
 conda activate qubridge-qce26
 python scripts/plot_figures.py
 ```
+
+### Option D — Logical-teleportation walkthrough (live circuit + DM simulation)
+
+```bash
+pip install -r requirements.txt
+jupyter notebook notebooks/walkthrough_logical_en.ipynb     # or _ja.ipynb
+```
+
+Reproduces Paper Table V (noise=1.0, |+⟩, logical) live: builds the
+six-qubit [[2,1,1]] deferred-measurement circuit, picks a layout on IBM
+Torino via VF2, constructs a Magnus-M1 Pauli-Lindblad noise model from the
+cached calibration snapshot, runs an Aer density-matrix simulation, and
+reports Phys F = 0.9849 / Log F = 0.9769 / Accept = 0.9263. Imports come
+from the vendored `qubridge_logical/` package; calibration data from
+`calibration/ibm_torino_2026-01-16.json`.
 
 ## Simulation environment
 

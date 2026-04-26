@@ -1,8 +1,11 @@
 # Pinned versions used in the QCE26 paper.
-# For reproduction of CSV/figure outputs only, the qiskit pins are not strictly
-# required (CSVs are pre-computed); they are listed for full-pipeline rerun.
+# For reproduction of CSV/figure outputs (scripts/, reproduce_all_*.ipynb) only
+# pandas/matplotlib/numpy are required; the qiskit pins are needed for the
+# walkthrough_logical_*.ipynb notebooks which run a live density-matrix
+# simulation through the vendored qubridge_logical/ package.
 pandas>=2.0
 matplotlib>=3.7
 numpy>=1.24
 qiskit==1.3.1
 qiskit-aer==0.16.0
+rustworkx>=0.14    # VF2 layout enumeration in qubridge_logical.qubit_selection
